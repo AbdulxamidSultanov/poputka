@@ -1,7 +1,8 @@
-import type { NextConfig } from "next";
+// next.config.js или next.config.mjs
+const withNextIntl = require('next-intl/plugin')(
+    './src/i18n/request.ts' // Путь к правильному файлу
+);
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-export default nextConfig;
+module.exports = withNextIntl({
+    // ваши настройки
+});
