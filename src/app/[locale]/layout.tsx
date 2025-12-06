@@ -1,10 +1,10 @@
-// app/[locale]/layout.tsx
-import type {Metadata} from "next";
-import {Geist, Geist_Mono} from "next/font/google";
-import {notFound} from "next/navigation";
-import {NextIntlClientProvider} from "next-intl";
-import {getMessages} from "next-intl/server";
-import routing from "@/i18n/routing";
+// src/app/[locale]/layout.tsx
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { notFound } from "next/navigation";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import routing, { isValidLocale } from "@/i18n/routing";
 import "./globals.scss";
 
 const geistSans = Geist({
@@ -23,25 +23,26 @@ export const metadata: Metadata = {
 };
 
 export function generateStaticParams() {
-    return routing.locales.map((locale) => ({locale}));
+    return routing.locales.map((locale) => ({ locale }));
 }
 
 interface LocaleLayoutProps {
     children: React.ReactNode;
-    params: Promise<{locale: string}>;
+    params: Promise<{ locale: string }>;
 }
 
 export default async function LocaleLayout({
                                                children,
-                                               params
+                                               params,
                                            }: LocaleLayoutProps) {
-    const {locale} = await params;
+    const { locale } = await params;
 
-    if (!routing.locales.includes(locale as any)) {
+    if (!isValidLocale(locale)) {
         notFound();
     }
 
-    const messages = await getMessages({locale});
+    const messages = await getMessages({ locale });
+
     return (
         <html lang={locale}>
         <body className={`${geistSans.variable} ${geistMono.variable}`}>

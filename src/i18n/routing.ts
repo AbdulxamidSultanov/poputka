@@ -1,13 +1,16 @@
-import {defineRouting} from "next-intl/routing";
+// src/i18n/routing.ts
+// Определяем типы для локалей
+export const locales = ['uz', 'en', 'ru', 'kz'] as const;
+export type Locale = typeof locales[number];
 
-const locales = ['uz', 'en', 'ru', 'kz'] as const;
-const defaultLocale = "en" as const;
-const localePrefix = 'always' as const;
-
-const routing = defineRouting({
+const routing = {
     locales,
-    defaultLocale,
-    localePrefix
-});
+    defaultLocale: 'uz' as Locale,
+    localeDetection: false,
+} as const;
 
 export default routing;
+
+export function isValidLocale(locale: string): locale is Locale {
+    return locales.includes(locale as Locale);
+}

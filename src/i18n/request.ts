@@ -1,15 +1,22 @@
 // src/i18n/request.ts
-import {getRequestConfig} from 'next-intl/server';
+import { getRequestConfig } from 'next-intl/server';
 import routing from './routing';
 
-export default getRequestConfig(async ({requestLocale}) => {
-    let locale = await requestLocale; // 'ru' из middleware
+// Создаем тип для локалей на основе routing.locales
+type Locale = typeof routing.locales[number];
 
+// Функция для проверки валидности локали
+function isValidLocale(locale: string): locale is Locale {
+    return (routing.locales as readonly string[]).includes(locale);
+}
 
-    if (!locale || !routing.locales.includes(locale as any)) {
-        locale = routing.defaultLocale; // Fallback на 'uz'
+export default getRequestConfig(async ({ requestLocale }) => {
+    let locale = await requestLocale;
+
+    // Используем функцию-предикат для проверки
+    if (!locale || !isValidLocale(locale)) {
+        locale = routing.defaultLocale as Locale;
     }
-
 
     return {
         locale,
