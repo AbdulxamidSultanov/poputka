@@ -1,0 +1,13 @@
+// middleware.ts
+import createMiddleware from 'next-intl/middleware';
+import routing from './src/i18n/routing';
+
+export default createMiddleware(routing);
+
+export const config = {
+    matcher: [
+        '/',
+        '/(uz|en|ru|kz)/:path*',
+        '/((?!_next|_vercel|.*\\..*).*)'
+    ]
+};

@@ -1,16 +1,27 @@
-import styles from "./LngChanger.module.scss"
+'use client';
 
-function LngChanger() {
+import { useRouter, usePathname } from '@/i18n/navigation';
+import routing from '@/i18n/routing';
+
+export default function LanguageSwitcher({locale}: {locale: string}) {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const handleChange = (newLocale: string) => {
+        const pathWithoutLocale = pathname.replace(
+            new RegExp(`^/(${routing.locales.join('|')})`),
+            ''
+        ) || '/';
+        router.replace(pathWithoutLocale, { locale: newLocale });
+    };
+
     return (
-        <div className={styles.lngChangerInput}>
-            <select name="LanguageChanger">
-                <option selected value="uz">uz</option>
-                <option value="en">en</option>
-                <option value="ru">ru</option>
-                <option value="kz">kz</option>
-            </select>
-        </div>
+        <select value={locale} onChange={(e) => handleChange(e.target.value)}>
+            {routing.locales.map((loc) => (
+                <option key={loc} value={loc}>
+                    {loc.toUpperCase()}
+                </option>
+            ))}
+        </select>
     );
 }
-
-export default LngChanger;
