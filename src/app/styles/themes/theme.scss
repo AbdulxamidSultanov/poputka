@@ -1,0 +1,6 @@
+@use "dark" as *;
+@use "light" as *;
+
+:root {
+  @extend .dark
+}
